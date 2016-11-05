@@ -1,177 +1,213 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Namespace an existing stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Namespace an existing stylesheet">
 
-	<title>CSS Stylesheet Namespacer | tabeth</title>
-	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-	<style>
-		body {
-			color: #777;
-		}
+<title>CSS Stylesheet Namespacer | tabeth</title>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<style>
 
-		.pure-img-responsive {
-			max-width: 100%;
-			height: auto;
-		}
+body {
+  color: #777;
+}
 
-		/*
-	The content `<div>` is where all your content goes.
-	*/
-	.content {
-		height: 100%;
-		margin: 0 auto;
-		padding: 0 2em;
-		max-width: 800px;
-		margin-bottom: 50px;
-		line-height: 1.6em;
-	}
+.plain-border {
+  border: 1px solid rgb(136, 136, 136);
+}
 
-	.header {
-		margin: 0;
-		color: #333;
-		text-align: center;
-		padding: 2.5em 2em 0;
-		border-bottom: 1px solid #eee;
-	}
-	.header h1 {
-		margin: 0.2em 0;
-		font-size: 3em;
-		font-weight: 300;
-	}
-	.header h2 {
-		font-weight: 300;
-		color: #ccc;
-		padding: 0;
-		margin-top: 0;
-	}
+.pure-img-responsive {
+  max-width: 100%;
+  height: auto;
+}
 
-	.content-subhead {
-		margin: 50px 0 20px 0;
-		font-weight: 300;
-		color: #888;
-	}
-		
-	.footer {
-		font-size: 75%;
-		border-top: 1px solid #eee;
-		margin-top: 3em;
-		padding: 1em;
-		background: rgb(250, 250, 250)
-	}
-		
-	textarea {
-		width: 100%;
-		height: 200px;
-		margin-bottom: 1em;
-		margin-top: 1em;
-	}
-	
-	#fixed-css {
-		width: 100%;
-		height: 200px;
-		margin-bottom: 1em;
-		margin-top: 1em;
-	}
-		
+.content {
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 2em;
+  max-width: 800px;
+  margin-bottom: 50px;
+  line-height: 1.6em;
+}
+
+.header {
+  margin: 0;
+  color: #333;
+  text-align: center;
+  padding: 2.5em 2em 0;
+  border-bottom: 1px solid #eee;
+}
+.header h1 {
+  margin: 0.2em 0;
+  font-size: 3em;
+  font-weight: 300;
+}
+.header h2 {
+  font-weight: 300;
+  color: #ccc;
+  padding: 0;
+  margin-top: 0;
+}
+
+.content-subhead {
+  margin: 50px 0 20px 0;
+  font-weight: 300;
+  color: #888;
+}
+
+.footer {
+  font-size: 75%;
+  border-top: 1px solid #eee;
+  margin-top: 3em;
+  padding: 1em;
+  background: rgb(250, 250, 250)
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 1em;
+}
+
+input {
+  width: 100%;
+}
+
+#fixed-css {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 1em;
+}
+
 
 </style>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 <script>
-
-
-/* Prefixes a given CSS string. Keep in mind all comments are removed
+/* Prefixes a given CSS string.
  *
  * @param {String} cssString - the CSS which has rules to be prefixed
  * @param {String} prefixName - the string to be used in prefixing
  * @param {String} delimiter - the delimiter to be used
- * @returns {undefined}
+ * @returns {String} original cssString prefixed by prefixName. Comments are removed.
  */
- function prefixCSSRule(cssString, prefixName, delimiter = ' ') {
- 	var uncommentedCSS = cssString.replace(/(\/\*[^]*?\*\/)/g, '');
- 	return uncommentedCSS.replace(/([\s$]*)((\/\/.*[\s$]+|.*\/\*.*\*\/[\s$]*|@media.*\{[\s$]*|)*)([\.#]?-?[_a-zA-Z]+[_a-zA-Z0-9-]*)/g, '$1$2' + prefixName + delimiter + '$4');
- }
+function prefixCSSRule(cssString, prefixName, delimiter = ' ') {
+  var uncommentedCSS = cssString.replace(/(\/\*[^]*?\*\/)/g, '');
+  return uncommentedCSS.replace(/([\s$]*)((\/\/.*[\s$]+|.*\/\*.*\*\/[\s$]*|@media.*\{[\s$]*|)*)([\.#]?-?[_a-zA-Z]+[_a-zA-Z0-9-]*)/g, '$1$2' + prefixName + delimiter + '$4');
+}
 
 /* Creates or updates a new textarea, with the new, prefixed, CSS
  *
  * @returns {DOM Object}
  */
- function createUpdatedCSSTextArea(){
- 	var newTextArea = document.getElementById('fixed-css');
- 	if (!newTextArea) {
- 		newTextArea = document.createElement('pre');
- 		newTextArea.id = 'fixed-css';
- 	}
+function createUpdatedCSSTextArea(){
+  var newTextArea = document.getElementById('fixed-css');
+  if (!newTextArea) {
+    newTextArea = document.createElement('pre');
+    newTextArea.id = 'fixed-css';
+  }
 
- 	var prefixedCSS = prefixCSSRule(
- 	'}' + document.getElementById('raw-css').value,
- 	'#test-prefix'
- 	);
+  var prefixedCSS = prefixCSSRule(
+      '}' + document.getElementById('raw-css').value,
+      document.getElementById('prefix-name').value
+  );
 
- 	newTextArea.innerText = prefixedCSS.slice(1);
- 	return newTextArea;
- }
+  newTextArea.innerText = prefixedCSS.slice(1);
+  return newTextArea;
+}
 </script>
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
 </head>
 <body>
 
-	<div id="main">
-		<div class="header">
-			<h1>CSS prefixer</h1>
-			<h2>Add class and/or ID to all elements given a stylesheet</h2>
-		</div>
-	
-		<div class="content">
-			<h2 class="content-subhead">Why prefix your CSS?</h2>
-			<p>
-				The inspiration for this came from needing to style
-				a single page app that would be inserted into an existing
-				application. What this meant was that the application, which may 
-				have its own styles and functionality should do so without conflicting
-				with the parent HTML or styles. In a situation like this, you would
-				like an iframe and be on your way, however requirements 
-				dictated that an iframe not be used. Enter css-prefixer. 
-				By prefixing an existing stylesheet (e.g. Bootstrap), I can 
-				leverage those styles by including that stylesheet into the page.
-				Now the single page app can use those styles, and 
-				the parent HTML isn't affected. Awesome!			
-			</p>
+<div id="main">
+  <div class="header">
+    <h1>CSS prefixer</h1>
+    <h2>Add class and/or ID to all elements given a stylesheet</h2>
+  </div>
 
-			<h2 class="content-subhead">How to use the CSS prefixer</h2>
-			<p> 
-				At heart, CSS prefixer is just a regular expression. 
-				To use it, just place your stylesheet in its entirety
-				into the textfield below and then click "prefix".			
-			</p>
-			<textarea id="raw-css"></textarea>
-			<button id="prefix-css-button" class="pure-button pure-button-primary">Prefix CSS</button>
-			<pre id="fixed-css" class="prettyprint lang-css"></pre>
-		</div>
-		<div class="footer">
-			<div class="pure-g">
-				<div class="pure-u-1 u-sm-1-2">
-					This site is built using Pure. All code on this 
-					site is licensed under MIT, unless otherwise stated.
-				</div>
-				<div class="pure-u-1 u-sm-1-2">
-					<a href="https://github.com/tabeth/css-prefixer">Github Project</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	
+  <div class="content">
+    <div class="pure-g">
+      <div class="pure-u-3-5">
+        <h2 class="content-subhead">Why prefix your CSS?</h2>
+        <p>
+          Imagine you work at XYZ Corp. After pleading with your boss
+          she finally lets you use subzero.js, the latest javascript
+          framework. Unfortunately, you don't have any authority to modify
+          existing code on the page.
+        </p>
+
+        <p>
+          After thinking about this, you figure that the best way to use
+          subzero is to insert a single page app inside of the existing page.
+          You're lazy and want to use bootstrap. Unfortunately, using bootstrap
+          globally will conflict with the rest of the pages' styles.
+        </p>
+
+        <p>
+          You're smart, and quickly figure out that the solution is just to
+          prefix every rule in bootstrap with #subzero-app, the ID of the div
+          that your app will live in. Cool like ice.
+        </p>
+      </div>
+
+      <div class="pure-u-2-5">
+        <img style="height: 475px" src="assets/add-spa.png">
+      </div>
+    </div>
+
+    <h2 class="content-subhead">How to use the CSS prefixer</h2>
+    <p>
+      CSS prefixer is just a ice cold regular expression for those who'd like
+      to quickly prefix some arbitrary CSS with a given ID or class name.
+      It's really just that simple. Put in the prefix name and then your code.
+      Don't forget to click the button!
+    </p>
+
+    <div style="margin-bottom: 1em">
+      <label for="prefix-name">Prefix Name</label>
+      <input class="plain-border" id="prefix-name" placeholder="#subzero-app"></input>
+    </div>
+
+    <label for="raw-css">CSS Stylesheet</label>
+    <textarea class="plain-border" id="raw-css"></textarea>
+
+    <button id="prefix-css-button" class="pure-button pure-button-primary">Prefix CSS</button>
+
+    <div style="margin-top: 1em">
+      <label for="fixed-css">Prefixed CSS</label>
+      <pre style="margin-top: -0.25em" id="fixed-css" class="prettyprint lang-css"></pre>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="pure-g">
+      <div class="pure-u-1 u-sm-1-2">
+        This site is built using Pure. All code on this
+        site is licensed under MIT, unless otherwise stated.
+      </div>
+      <div class="pure-u-1 u-sm-1-2">
+        <a href="https://github.com/tabeth/css-prefixer">check it out on github</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-	document.getElementById('prefix-css-button').addEventListener('click', function(){
-		var cssTextArea = createUpdatedCSSTextArea();
-		var contentElement = document.getElementsByClassName('content')[0];
-		
-		if (document.getElementById('fixed-css')) { 
-			contentElement.removeChild(cssTextArea);
-		}
-		contentElement.appendChild(cssTextArea);	
-	}, false);
+document.getElementById('prefix-css-button').addEventListener('click', function(){
+    var cssTextArea = createUpdatedCSSTextArea();
+    var contentElement = document.getElementsByClassName('content')[0];
+    var fixedCSSElement = document.getElementById('fixed-css');
+
+    if (fixedCSSElement) {
+      /* Make the element remove itself */
+      fixedCSSElement.parentElement.removeChild(fixedCSSElement);
+    }
+
+    contentElement.appendChild(cssTextArea);
+    }, false);
 </script>
 </body>
 </html>

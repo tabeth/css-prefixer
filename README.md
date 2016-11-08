@@ -15,3 +15,6 @@ function prefixCSSRule(cssString, prefixName, delimiter = ' ') {
   return uncommentedCSS.replace(/([\s$]*)((\/\/.*[\s$]+|.*\/\*.*\*\/[\s$]*|@media.*\{[\s$]*|)*)([\.#]?-?[_a-zA-Z]+[_a-zA-Z0-9-]*)/g, '$1$2' + prefixName + delimiter + '$4');
 }
  ```
+
+#acknowledgements 
+RustyTheBoyRobot on stackoverflow

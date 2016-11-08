@@ -12,7 +12,7 @@ It's dead simple. [Use it online](http://projects.tabeth.com/css-prefixer), or c
  */
 function prefixCSSRule(cssString, prefixName, delimiter = ' ') {
   var uncommentedCSS = cssString.replace(/(\/\*[^]*?\*\/)/g, '');
-  return uncommentedCSS.replace(/([\s$]*)((\/\/.*[\s$]+|.*\/\*.*\*\/[\s$]*|@media.*\{[\s$]*|)*)([\.#]?-?[_a-zA-Z]+[_a-zA-Z0-9-]*)/g, '$1$2' + prefixName + delimiter + '$4');
+  return uncommentedCSS.replace(/([,|\}][\s$]*)((\/\/.*[\s$]+|.*\/\*.*\*\/[\s$]*|@media.*\{[\s$]*|)*)([\.#]?-?[_a-zA-Z]+[_a-zA-Z0-9-]*)/g, '$1$2' + prefixName + delimiter + '$4');
 }
  ```
 
